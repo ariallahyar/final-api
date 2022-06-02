@@ -1,10 +1,9 @@
 import mongoose from "mongoose";
-import crypto from "crypto";
 
 const userSchema = mongoose.Schema({
-  displayName: {
+  name: {
     type: String,
-    required: [true, "please add a username"],
+    required: [true, "please add a name"],
   },
   email: {
     type: String,
@@ -15,10 +14,6 @@ const userSchema = mongoose.Schema({
   password: {
     type: String,
     required: [true, "please add a password"],
-  },
-  accessToken: {
-    type: String,
-    default: () => crypto.randomBytes(128).toString("hex"),
   },
 });
 
