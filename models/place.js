@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 
 const placeSchema = new mongoose.Schema({
-  placeId: {
+  google_place_id: {
     type: String,
     required: [true, "please enter a Google PlaceId"],
+    unique: true,
   },
   name: {
     type: String,
@@ -13,11 +14,21 @@ const placeSchema = new mongoose.Schema({
     type: String,
     required: [true, "please enter a city"],
   },
-  location: {
-    type: Object,
-    required: [true, "please enter latitude and longitude coordinates"],
+  description: {
+    type: String,
+    required: [true, "please enter a description"],
   },
-  categories: [
+  coordinates: {
+    lat: {
+      type: Number,
+      required: [true, "please enter a latitude"],
+    },
+    lng: {
+      type: Number,
+      required: [true, "please enter a longitude"],
+    },
+  },
+  tags: [
     {
       type: String,
       enum: {
