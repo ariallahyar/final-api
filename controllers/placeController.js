@@ -1,3 +1,4 @@
+import fetch from "node-fetch";
 import Place from "../models/place";
 
 const getPlace = async (id) => {
