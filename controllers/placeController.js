@@ -1,14 +1,16 @@
 import Place from "../models/place";
 
-const getOnePlace = async (id) => {
-  const URL = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${id}&fields=place_id,formatted_address,name,photos&key=${process.env.GOOGLE_MAPS_API_KEY}`;
+const getPlace = async (id) => {
+  const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${id}&fields=place_id,formatted_address,name,photos&key=${process.env.GOOGLE_MAPS_API_KEY}`;
   try {
-    const response = await fetch(URL);
+    const response = await fetch(url);
 
     if (!response.ok) {
       throw new Error(`HTTP error ${response.status}`);
     }
-    return response.json();
+
+    const data = await response.json();
+    return data.result;
   } catch (error) {
     console.log(error);
   }
@@ -17,27 +19,16 @@ const getOnePlace = async (id) => {
 // @desc	  Get places
 // @route		GET /places
 const getPlaces = async (req, res) => {
-  const placesDb = await Place.find();
-
-  let googleApi = await Promise.all(placesDb.map((place) => getOnePlace(place.google_place_id)));
-  googleApi = googleApi.map((result) => result.result);
+  const placesDB = await Place.find();
+  const placesGoogle = await Promise.all(placesDB.map((place) => getPlace(place.google_place_id)));
 
   let merged = [];
 
-  for (let i = 0; i < placesDb.length; i++) {
-    const place = {
-      ...placesDb[i]._doc,
-      ...googleApi.find((itmInner) => itmInner.place_id === placesDb[i].google_place_id),
-    };
-
-    const placeFormatted = Object.keys(place)
-      .sort()
-      .reduce((obj, key) => {
-        obj[key] = place[key];
-        return obj;
-      }, {});
-
-    merged.push(placeFormatted);
+  for (let i = 0; i < placesDB.length; i++) {
+    merged.push({
+      ...placesDB[i]._doc,
+      ...placesGoogle.find((item) => item.place_id === placesDB[i].google_place_id),
+    });
   }
 
   const results = merged.map(({ google_place_id, _id, __v, ...result }) => result);
