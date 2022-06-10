@@ -5,6 +5,7 @@ import connectDB from "./config/db";
 
 import placeRoutes from "./routes/placeRoutes";
 import userRoutes from "./routes/userRoutes";
+import recommendationRoutes from "./routes/recommendationRoutes";
 
 const port = process.env.PORT || 8080;
 
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/places", placeRoutes);
 app.use("/users", userRoutes);
+app.use("/recommendations", recommendationRoutes);
 
 app.get("/", (req, res) => res.send("Final project"));
 

@@ -45,7 +45,6 @@ const registerUser = async (req, res) => {
     _id: user.id,
     name: user.name,
     email: user.email,
-    token: user.token,
   });
 };
 
@@ -107,7 +106,6 @@ const authorize = async (req, res, next) => {
   // need to compare that session with this token has the same user id
 
   if (session) {
-    res.json({ message: "nice!" });
     next();
   } else {
     res.status(401).json({ message: "No active session found." });
