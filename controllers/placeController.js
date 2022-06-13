@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import Place from "../models/place";
 
 const getPlace = async (id) => {
-  const fields = "formatted_address,name,photo,geometry,place_id,type,url";
+  const fields = "formatted_address,name,photo,geometry,place_id,type,url,website";
   const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${id}&fields=${fields}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
   try {
     const response = await fetch(url);
