@@ -6,10 +6,6 @@ const placeSchema = new mongoose.Schema({
     required: [true, "please enter a Google PlaceId"],
     unique: true,
   },
-  name: {
-    type: String,
-    required: [true, "please enter a name"],
-  },
   city: {
     type: String,
     required: [true, "please enter a city"],
@@ -17,16 +13,6 @@ const placeSchema = new mongoose.Schema({
   description: {
     type: String,
     required: [true, "please enter a description"],
-  },
-  coordinates: {
-    lat: {
-      type: Number,
-      required: [true, "please enter a latitude"],
-    },
-    lng: {
-      type: Number,
-      required: [true, "please enter a longitude"],
-    },
   },
   tags: [
     {
