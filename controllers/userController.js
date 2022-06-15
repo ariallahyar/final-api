@@ -49,7 +49,7 @@ const registerUser = async (req, res) => {
 };
 
 // @desc		Authenticate a user and create session
-// @route		POST /users/session
+// @route		POST /users/auth
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -71,7 +71,7 @@ const loginUser = async (req, res) => {
 };
 
 // @desc		Logout a user by ending session
-// @route		DELETE /users/session
+// @route		DELETE /users/auth
 const logoutUser = async (req, res) => {
   const session = await Session.findOne({ token: req.header("Token") });
 
