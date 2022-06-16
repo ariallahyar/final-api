@@ -1,7 +1,7 @@
 import Recommendation from "../models/recommendation";
 
 const getRecommendations = async (req, res) => {
-  const recommendations = await Recommendation.find();
+  const recommendations = await Recommendation.find().sort({ createdAt: "desc" });
 
   res.status(200).json({
     success: true,
