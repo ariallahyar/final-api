@@ -24,7 +24,6 @@ const registerUser = async (req, res, next) => {
     res.status(400);
     throw new Error("Please provide all required fields");
   }
-  ƒ;
   const userExists = await User.findOne({ email });
 
   if (userExists) {
@@ -35,7 +34,7 @@ const registerUser = async (req, res, next) => {
   const salt = bcrypt.genSaltSync();
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  const user = await User.create({
+  await User.create({
     name,
     email,
     password: hashedPassword,
