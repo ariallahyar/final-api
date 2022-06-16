@@ -1,6 +1,5 @@
 import express from "express";
 import {
-  getUsers,
   registerUser,
   loginUser,
   authorize,
@@ -8,15 +7,12 @@ import {
   removeUser,
 } from "../controllers/userController.js";
 
-import { submitRecommendation } from "../controllers/recommendationController";
-
 const router = express.Router();
 
-router.get("/", getUsers);
+// router.get("/", getUsers);  // needs admin authorization
 router.post("/", registerUser);
-router.delete("/", removeUser);
+router.delete("/", authorize, removeUser);
 router.post("/auth", loginUser);
-router.delete("/auth", logoutUser);
-router.post("/auth/recommendation", authorize, submitRecommendation);
+router.delete("/auth", authorize, logoutUser);
 
 module.exports = router;

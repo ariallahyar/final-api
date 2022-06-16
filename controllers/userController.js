@@ -89,12 +89,14 @@ const logoutUser = async (req, res) => {
 const removeUser = async (req, res) => {
   const { _id } = req.body;
   const user = await User.findOne({ _id });
+  const session = await Session.findOne({ token: req.header("Token") });
 
-  if (!user) {
+  if (!user || !session) {
     res.status(404);
     throw new Error("User not found");
   }
   await user.remove();
+  await session.remove();
 
   res.status(200).json({ success: true });
 };

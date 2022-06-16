@@ -22,9 +22,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/places", placeRoutes);
-app.use("/users", userRoutes);
-app.use("/recommendations", recommendationRoutes);
+app.use("/place", placeRoutes);
+app.use("/user", userRoutes);
+app.use("/recommendation", recommendationRoutes);
 
 app.get("/", (req, res) => res.send("Final project"));
 
