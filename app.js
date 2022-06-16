@@ -13,15 +13,9 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+app.use(cors()); // allows all origins
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-// app.use((req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
 
 app.use("/place", placeRoutes);
 app.use("/user", userRoutes);
