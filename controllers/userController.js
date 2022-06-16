@@ -17,14 +17,14 @@ const getUsers = async (req, res) => {
 
 // @desc		Register new user
 // @route		POST /users
-const registerUser = async (req, res) => {
+const registerUser = async (req, res, next) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
     res.status(400);
     throw new Error("Please provide all required fields");
   }
-
+  ƒ;
   const userExists = await User.findOne({ email });
 
   if (userExists) {
@@ -41,11 +41,12 @@ const registerUser = async (req, res) => {
     password: hashedPassword,
   });
 
-  res.status(201).json({
-    _id: user.id,
-    name: user.name,
-    email: user.email,
-  });
+  next();
+  // res.status(201).json({
+  //   _id: user.id,
+  //   name: user.name,
+  //   email: user.email,
+  // });
 };
 
 // @desc		Authenticate a user and create session
