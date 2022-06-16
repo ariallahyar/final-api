@@ -2,7 +2,8 @@ import fetch from "node-fetch";
 import Place from "../models/place";
 
 const getPlace = async (id) => {
-  const fields = "formatted_address,name,photo,geometry/location,place_id,type,url,vicinity,website";
+  const fields =
+    "formatted_address,name,photo,geometry/location,place_id,type,url,vicinity,website";
   const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${id}&fields=${fields}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
   try {
     const response = await fetch(url);
@@ -69,7 +70,18 @@ const newPlace = async (req, res) => {
   });
 };
 
+// @desc	  Get photo
+// @route		GET /places/photo
+const getPhoto = async (req, res) => {
+  const { photo_ref } = req.query;
+
+  const url = `https://maps.googleapis.com/maps/api/place/photo?photo_reference=${photo_ref}&maxwidth=400&key=${process.env.GOOGLE_MAPS_API_KEY}`;
+
+  res.redirect(url);
+};
+
 module.exports = {
   getPlaces,
   newPlace,
+  getPhoto,
 };
