@@ -77,7 +77,7 @@ const getPhoto = async (req, res) => {
 
   const url = `https://maps.googleapis.com/maps/api/place/photo?photo_reference=${photo_ref}&maxwidth=400&key=${process.env.GOOGLE_MAPS_API_KEY}`;
 
-  res.redirect(url);
+  res.send(url);
 };
 
 module.exports = {
