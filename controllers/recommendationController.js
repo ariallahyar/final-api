@@ -10,7 +10,8 @@ const getRecommendations = async (req, res) => {
 };
 
 const submitRecommendation = async (req, res) => {
-  const { user_id, city, nameOfPlace, comment, website } = req.body;
+  const user_id = req.header("UserID");
+  const { city, nameOfPlace, comment, website } = req.body;
 
   if (!user_id || !city || !nameOfPlace || !comment || !website) {
     res.status(400);
@@ -31,7 +32,23 @@ const submitRecommendation = async (req, res) => {
   });
 };
 
+const deleteRecommendation = async (req, res) => {
+  const user_id = req.header("UserID");
+  const { _id } = req.body;
+
+  const recommendation = await Recommendation.findOne({ _id });
+
+  if (user_id !== recommendation.user_id) {
+    res.status(404);
+    throw new Error("User not authorized to delete");
+  }
+
+  await recommendation.remove();
+  res.status(200).json({ success: true });
+};
+
 module.exports = {
   getRecommendations,
   submitRecommendation,
+  deleteRecommendation,
 };
