@@ -87,8 +87,7 @@ const logoutUser = async (req, res) => {
 // @desc		Remove a user
 // @route		DELETE /users
 const removeUser = async (req, res) => {
-  const { _id } = req.body;
-  const user = await User.findOne({ _id });
+  const user = await User.findOne({ _id: req.header("UserId") });
   const session = await Session.findOne({ token: req.header("Token") });
 
   if (!user || !session) {
@@ -103,11 +102,10 @@ const removeUser = async (req, res) => {
 
 // @desc		Authorize a request
 const authorize = async (req, res, next) => {
-  const session = await Session.findOne({ token: req.header("Token") });
+  const session = await Session.findOne({ user_id: req.header("UserId") });
+  const authorizedUser = session.token === req.header("Token");
 
-  // need to compare that session with this token has the same user id
-
-  if (session) {
+  if (authorizedUser) {
     next();
   } else {
     res.status(401).json({ message: "No active session found." });
