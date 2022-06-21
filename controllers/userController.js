@@ -103,7 +103,7 @@ const removeUser = async (req, res) => {
 // @desc		Authorize a request
 const authorize = async (req, res, next) => {
   const session = await Session.findOne({ user_id: req.header("UserId") });
-  const authorizedUser = await session.token === req.header("Token");
+  const authorizedUser = session.token === req.header("Token");
 
   if (authorizedUser) {
     next();

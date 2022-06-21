@@ -44,7 +44,7 @@ const deleteRecommendation = async (req, res) => {
   }
 
   await recommendation.remove();
-  res.status(200).json({ success: true });
+  res.status(200).json({ success: true, deleted: recommendation });
 };
 
 module.exports = {
