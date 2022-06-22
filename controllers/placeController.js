@@ -1,7 +1,9 @@
 import fetch from "node-fetch";
 import Place from "../models/place";
+import asyncHandler from "express-async-handler";
 
-const getPlace = async (id) => {
+// @desc		Get place details from Place API
+const getPlace = asyncHandler(async (id) => {
   const fields =
     "formatted_address,name,photo,geometry/location,place_id,type,url,vicinity,website";
   const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${id}&fields=${fields}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
@@ -17,11 +19,11 @@ const getPlace = async (id) => {
   } catch (error) {
     console.log(error);
   }
-};
+});
 
 // @desc	  Get places
-// @route		GET /places
-const getPlaces = async (req, res) => {
+// @route		GET /place
+const getPlaces = asyncHandler(async (req, res) => {
   const { city } = req.query;
   let queries = {};
 
@@ -48,14 +50,11 @@ const getPlaces = async (req, res) => {
     total: results.length,
     results: results,
   });
-};
+});
 
 // @desc		Set new place
-// @route		POST /places
-const newPlace = async (req, res) => {
-  // const { google_place_id, name, city, coordinates, description, tags } = req.body;
-  // const place = await Place.create({ google_place_id, name, city, coordinates, description, tags });
-
+// @route		POST /place
+const newPlace = asyncHandler(async (req, res) => {
   const { google_place_id, city, description, tags } = req.body;
   const place = await Place.create({ google_place_id, city, description, tags });
 
@@ -68,17 +67,17 @@ const newPlace = async (req, res) => {
     success: true,
     created: place,
   });
-};
+});
 
 // @desc	  Get photo
-// @route		GET /places/photo
-const getPhoto = async (req, res) => {
+// @route		GET /place/photo
+const getPhoto = asyncHandler(async (req, res) => {
   const { photo_ref } = req.query;
 
   const url = `https://maps.googleapis.com/maps/api/place/photo?photo_reference=${photo_ref}&maxwidth=400&key=${process.env.GOOGLE_MAPS_API_KEY}`;
 
   res.send(url);
-};
+});
 
 module.exports = {
   getPlaces,

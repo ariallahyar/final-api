@@ -1,6 +1,9 @@
 import Subcriber from "../models/subscriber";
+import asyncHandler from "express-async-handler";
 
-const getSubscriberList = async (req, res) => {
+// @desc		Get list of subscribers
+// @route		GET /society
+const getSubscriberList = asyncHandler(async (req, res) => {
   const subscribers = await Subcriber.find();
 
   res.status(200).json({
@@ -8,9 +11,11 @@ const getSubscriberList = async (req, res) => {
     total: subscribers.length,
     results: subscribers,
   });
-};
+});
 
-const submitEmail = async (req, res) => {
+// @desc		Post subcriber's email
+// @route		POST /society
+const submitEmail = asyncHandler(async (req, res) => {
   const { email } = req.body;
 
   if (!email) {
@@ -24,7 +29,7 @@ const submitEmail = async (req, res) => {
     success: true,
     response: subscriber,
   });
-};
+});
 
 module.exports = {
   getSubscriberList,

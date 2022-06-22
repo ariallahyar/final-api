@@ -1,15 +1,20 @@
 import Recommendation from "../models/recommendation";
+import asyncHandler from "express-async-handler";
 
-const getRecommendations = async (req, res) => {
+// @desc		Get list of recommendations
+// @route		GET /recommendation
+const getRecommendations = asyncHandler(async (req, res) => {
   const recommendations = await Recommendation.find().sort({ createdAt: "desc" });
 
   res.status(200).json({
     success: true,
     results: recommendations,
   });
-};
+});
 
-const submitRecommendation = async (req, res) => {
+// @desc		Submit a recommendation
+// @route		POST /recommendation
+const submitRecommendation = asyncHandler(async (req, res) => {
   const user_id = req.header("UserID");
   const { city, nameOfPlace, comment, website } = req.body;
 
@@ -30,22 +35,24 @@ const submitRecommendation = async (req, res) => {
     success: true,
     result: recommendation,
   });
-};
+});
 
-const deleteRecommendation = async (req, res) => {
+// @desc		Delete a recommendation
+// @route		DELETE /recommendation
+const deleteRecommendation = asyncHandler(async (req, res) => {
   const user_id = req.header("UserID");
   const { _id } = req.body;
 
   const recommendation = await Recommendation.findOne({ _id });
 
   if (user_id !== recommendation.user_id) {
-    res.status(404);
+    res.status(401);
     throw new Error("User not authorized to delete");
   }
 
   await recommendation.remove();
   res.status(200).json({ success: true, deleted: recommendation });
-};
+});
 
 module.exports = {
   getRecommendations,

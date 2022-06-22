@@ -2,6 +2,7 @@ import express from "express";
 import {} from "dotenv/config";
 import cors from "cors";
 import connectDB from "./config/db";
+import { errorHandler } from "./middlewear/errorMiddlewear";
 
 import placeRoutes from "./routes/placeRoutes";
 import userRoutes from "./routes/userRoutes";
@@ -22,6 +23,8 @@ app.use("/place", placeRoutes);
 app.use("/user", userRoutes);
 app.use("/recommendation", recommendationRoutes);
 app.use("/society", societyRoutes);
+
+app.use(errorHandler);
 
 app.get("/", (req, res) => res.send("Final project"));
 
