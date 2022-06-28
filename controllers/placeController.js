@@ -15,6 +15,7 @@ const getPlaceDetails = async (id) => {
           "name",
           "geometry/location",
           "place_id",
+          "photo",
           "type",
           "url",
           "vicinity",
@@ -85,9 +86,18 @@ const newPlace = asyncHandler(async (req, res) => {
 const getPhoto = asyncHandler(async (req, res) => {
   const { photo_ref } = req.query;
 
-  const url = `https://maps.googleapis.com/maps/api/place/photo?photo_reference=${photo_ref}&maxwidth=400&key=${process.env.GOOGLE_MAPS_API_KEY}`;
-
-  console.log(res.url);
+  const response = await client
+    .placePhoto({
+      params: {
+        maxheight: 400,
+        maxwidth: 400,
+        photoreference: photo_ref,
+        key: API_KEY,
+      },
+      timeout: 1000, // milliseconds
+    })
+    .catch((err) => console.log(err));
+  res.send(response.data);
 });
 
 module.exports = {
