@@ -1,25 +1,34 @@
-import fetch from "node-fetch";
 import Place from "../models/place";
 import asyncHandler from "express-async-handler";
+import { Client } from "@googlemaps/google-maps-services-js";
+
+const client = new Client({});
+const API_KEY = process.env.GOOGLE_MAPS_API_KEY;
 
 // @desc		Get place details from Place API
-const getPlace = asyncHandler(async (id) => {
-  const fields =
-    "formatted_address,name,photo,geometry/location,place_id,type,url,vicinity,website";
-  const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${id}&fields=${fields}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
-  try {
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error(`HTTP error ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data.result;
-  } catch (error) {
-    console.log(error);
-  }
-});
+const getPlaceDetails = async (id) => {
+  const response = await client
+    .placeDetails({
+      params: {
+        fields: [
+          "formatted_address",
+          "name",
+          "geometry/location",
+          "place_id",
+          "type",
+          "url",
+          "vicinity",
+          "website",
+        ],
+        language: "en",
+        place_id: id,
+        key: API_KEY,
+      },
+      timeout: 1000, // milliseconds
+    })
+    .catch((err) => console.log(err));
+  return response.data.result;
+};
 
 // @desc	  Get places
 // @route		GET /place
@@ -32,7 +41,9 @@ const getPlaces = asyncHandler(async (req, res) => {
   }
 
   const placesDB = await Place.find(queries);
-  const placesGoogle = await Promise.all(placesDB.map((place) => getPlace(place.google_place_id)));
+  const placesGoogle = await Promise.all(
+    placesDB.map((place) => getPlaceDetails(place.google_place_id))
+  );
 
   let merged = [];
 
@@ -76,7 +87,7 @@ const getPhoto = asyncHandler(async (req, res) => {
 
   const url = `https://maps.googleapis.com/maps/api/place/photo?photo_reference=${photo_ref}&maxwidth=400&key=${process.env.GOOGLE_MAPS_API_KEY}`;
 
-  res.send(url);
+  console.log(res.url);
 });
 
 module.exports = {
