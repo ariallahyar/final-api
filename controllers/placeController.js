@@ -89,8 +89,8 @@ const getPhoto = asyncHandler(async (req, res) => {
   const response = await client
     .placePhoto({
       params: {
-        maxheight: 400,
-        maxwidth: 400,
+        maxheight: 1000,
+        maxwidth: 1000,
         photoreference: photo_ref,
         key: API_KEY,
       },
