@@ -50,7 +50,7 @@ const deleteRecommendation = asyncHandler(async (req, res) => {
     throw new Error("User not authorized to delete");
   }
 
-  await recommendation.remove();
+  await recommendation.deleteOne();
   res.status(200).json({ success: true, deleted: recommendation });
 });
 

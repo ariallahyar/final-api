@@ -1,5 +1,6 @@
 import User from "../models/user";
 import Session from "../models/session";
+import Recommendation from "../models/recommendation";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import asyncHandler from "express-async-handler"; // instead of try-catch
@@ -85,7 +86,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Session not found");
   }
-  await session.remove();
+  await session.deleteOne();
 
   res.status(200).json({ success: true });
 });
@@ -100,8 +101,10 @@ const removeUser = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("User not found");
   }
-  await user.remove();
-  await session.remove();
+
+  await Recommendation.deleteMany({ user_id: user._id });
+  await session.deleteOne();
+  await user.deleteOne();
 
   res.status(200).json({ success: true });
 });
