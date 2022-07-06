@@ -1,4 +1,5 @@
 import Recommendation from "../models/recommendation";
+import User from "../models/user";
 import asyncHandler from "express-async-handler";
 
 // @desc		Get list of recommendations
@@ -6,9 +7,16 @@ import asyncHandler from "express-async-handler";
 const getRecommendations = asyncHandler(async (req, res) => {
   const recommendations = await Recommendation.find().sort({ createdAt: "desc" });
 
+  const results = await Promise.all(
+    recommendations.map(async (rec) => {
+      const user = await User.findOne({ _id: rec.user_id });
+      return { ...rec._doc, submittedBy: user.name };
+    })
+  );
+
   res.status(200).json({
     success: true,
-    results: recommendations,
+    results: results,
   });
 });
 
