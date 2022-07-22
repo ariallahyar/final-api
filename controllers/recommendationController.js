@@ -23,7 +23,7 @@ const getRecommendations = asyncHandler(async (req, res) => {
 // @desc		Submit a recommendation
 // @route		POST /recommendation
 const submitRecommendation = asyncHandler(async (req, res) => {
-  const user_id = req.header("UserID");
+  const user_id = req.header("UserId");
   const { city, nameOfPlace, comment, website } = req.body;
 
   if (!user_id || !city || !nameOfPlace || !comment || !website) {
@@ -48,7 +48,7 @@ const submitRecommendation = asyncHandler(async (req, res) => {
 // @desc		Delete a recommendation
 // @route		DELETE /recommendation
 const deleteRecommendation = asyncHandler(async (req, res) => {
-  const user_id = req.header("UserID");
+  const user_id = req.header("UserId");
   const { _id } = req.body;
 
   const recommendation = await Recommendation.findOne({ _id });
